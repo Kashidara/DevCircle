@@ -1,0 +1,30 @@
+body {
+    font-size: 15px;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+#welcome {
+    font-size: 30px;
+    text-shadow: 0 0 5px #00eeff, 0 0 10px #00eeff, 0 0 15px #00eeff;
+    text-align: center;
+    color: #001aff;
+}
+
+main {
+
+    text-align: center;
+    font-size: 15px;
+    background-color: #fff;
+    text-align: center;
+}
+
+footer {
+    text-align: center;
+    font-size: 0.8em;
+    color: #777;
+}
+
+div {
+    margin: auto;
+}
