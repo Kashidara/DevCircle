@@ -1,7 +1,13 @@
 body {
     font-size: 15px;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f4f4f4 100%);
     font-family: Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+}
+
+#header {
+    background-color: transparent;
 }
 
 #welcome {
@@ -9,22 +15,101 @@ body {
     text-shadow: 0 0 5px #00eeff, 0 0 10px #00eeff, 0 0 15px #00eeff;
     text-align: center;
     color: #001aff;
+    margin-top: 30px;
 }
 
 main {
-
     text-align: center;
     font-size: 15px;
-    background-color: #fff;
-    text-align: center;
+    background-color: transparent;
+    margin: 20px auto;
+    padding: 10px;
+    width: 90%;
+    max-width: 500px;
 }
 
 footer {
     text-align: center;
     font-size: 0.8em;
     color: #777;
+    margin-top: 40px;
 }
 
-div {
+.center-box {
+    background: #fff;
+    margin: 30px auto;
+    padding: 30px 25px 20px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    width: 90%;
+    max-width: 400px;
+    text-align: left;
+}
+
+.login-title {
     text-align: center;
+    color: #001aff;
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #333;
+}
+
+form input {
+    width: 100%;
+    padding: 10px 8px;
+    margin-bottom: 18px;
+    border: 1px solid #b3b3b3;
+    border-radius: 6px;
+    font-size: 1em;
+    background: #f7faff;
+    transition: border 0.2s;
+}
+
+form input:focus {
+    border: 1.5px solid #001aff;
+    outline: none;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #001aff 60%, #00eeff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(90deg, #00eeff 0%, #001aff 100%);
+}
+
+a {
+    color: #001aff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#registerMessage,
+#loginMessage {
+
+    #registerMessage,
+    #loginMessage {
+        margin-top: 10px;
+        color: #d8000c;
+        font-weight: bold;
+        text-align: center;
+    }
 }

@@ -7,37 +7,38 @@
     <title>DevCircle</title>
     <meta name="description" content="DevCircle -The place were devs can find and comunicate freely.">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
-
 </head>
 
 <body>
-
     <header>
-        <h1 id="welcome">
-            Welcome to DevCircle</h1>
+        <h1 id="welcome">Welcome to DevCircle</h1>
     </header>
 
     <main>
-        <p>The place were devs can find and comunicate freely</p>
+        <p class="header">The place where devs can find and communicate freely</p>
     </main>
-    <div class="Center">
-        <h2 class="Login">Register Page</h2>
-        <h3 class="Username">Username</h3>
-        <textarea name="" id=""></textarea>
-        <h3 class="Email">Email/number</h3>
-        <textarea name="Email" id="Email"></textarea>
-        <h3 class="Password">Password</h3>
-        <textarea name="" id=""></textarea>
-    </div>
-    <div>
-        <button id="sign in" name="submit" type="submit">Sign in</button>
+    <div class="center-box">
+        <h2 class="login-title">Register Page</h2>
+        <form id="registerForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+        <div id="registerMessage"></div>
     </div>
 
     <footer>
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
-
+    <script src="register.js"></script>
 </body>
 
 </html>
