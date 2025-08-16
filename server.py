@@ -6,7 +6,7 @@ import jwt
 import datetime
 from functools import wraps
 
-app = Flask(__name__)chan
+app = Flask(__name__)
 app.config['SECRET_KEY'] = 'devcircle_secret'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///devcircle.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
