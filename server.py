@@ -5,7 +5,6 @@ from flask_bcrypt import Bcrypt
 import jwt
 import datetime
 from functools import wraps
-import { Analytics } from "@vercel/analytics/next"
 
 app = Flask(__name__)chan
 app.config['SECRET_KEY'] = 'devcircle_secret'
