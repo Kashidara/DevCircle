@@ -5,11 +5,15 @@
     <meta charset="UTF-8">
     <title>DevCircle - Main</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
 </head>
 
 <body>
     <header>
         <h1 id="welcome">Welcome to DevCircle</h1>
+        <div class="profile-circle" id="profileCircle" title="Account Settings">
+            <!-- Profile image or initial will be inserted by JS -->
+        </div>
     </header>
     <div class="center-box">
         <h2 class="login-title">Main Page</h2>
@@ -20,17 +24,10 @@
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
     <script>
-        // Show logged-in user
-        const user = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
-        if (!user) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('userGreeting').textContent = 'Hello, ' + user.username + '!';
-        }
-        document.getElementById('logoutBtn').onclick = function () {
-            localStorage.removeItem('loggedInUser');
-            window.location.href = 'login.html';
-        };
+        const user = getLoggedInUser();
+        document.getElementById('userGreeting').textContent = 'Hello, ' + user.username + '!';
+        renderProfileCircle(user);
+        setupLogoutButton();
     </script>
 </body>
 

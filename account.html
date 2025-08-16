@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DevCircle - Account Settings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1 id="welcome">Account Settings</h1>
+    </header>
+    <div class="center-box">
+        <a href="main.html" class="back-link">&larr; Back to Main</a>
+        <div class="profile-preview" id="profilePreview"></div>
+        <form class="settings-form" id="settingsForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" required>
+
+            <label for="pfp">Profile Picture</label>
+            <input type="file" id="pfp" accept="image/*">
+
+            <button type="submit">Save Changes</button>
+        </form>
+        <button id="logoutBtn" style="margin-top:20px;">Logout</button>
+        <div id="settingsMessage"></div>
+    </div>
+    <footer>
+        <p>&copy; 2024 DevCircle. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        let user = getLoggedInUser();
+        // Show profile preview
+        const profilePreview = document.getElementById('profilePreview');
+        function updatePreview() {
+            profilePreview.innerHTML = '';
+            if (user.pfp) {
+                const img = document.createElement('img');
+                img.src = user.pfp;
+                img.alt = "Profile";
+                profilePreview.appendChild(img);
+            } else {
+                const span = document.createElement('span');
+                span.className = "profile-initial";
+                span.textContent = user.username ? user.username[0].toUpperCase() : "?";
+                profilePreview.appendChild(span);
+            }
+        }
+        updatePreview();
+
+        document.getElementById('username').value = user.username;
+
+        document.getElementById('settingsForm').onsubmit = function (e) {
+            e.preventDefault();
+            const newUsername = document.getElementById('username').value.trim();
+            if (!newUsername) {
+                document.getElementById('settingsMessage').textContent = "Username cannot be empty.";
+                document.getElementById('settingsMessage').style.color = "red";
+                return;
+            }
+            user.username = newUsername;
+            const fileInput = document.getElementById('pfp');
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    user.pfp = evt.target.result;
+                    saveUser();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveUser();
+            }
+        };
+
+        function saveUser() {
+            updateUserInStorage(user);
+            updatePreview();
+            document.getElementById('settingsMessage').textContent = "Profile updated!";
+            document.getElementById('settingsMessage').style.color = "green";
+        }
+
+        setupLogoutButton();
+
+        document.getElementById('pfp').onchange = function () {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    profilePreview.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.src = evt.target.result;
+                    img.alt = "Profile";
+                    profilePreview.appendChild(img);
+                };
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                updatePreview();
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -41,7 +41,6 @@ footer {
     padding: 30px 25px 20px 25px;
     border-radius: 12px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     width: 90%;
     max-width: 400px;
     text-align: left;
@@ -102,14 +101,96 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Fixed bug: removed invalid nested selector and fixed color property */
 #registerMessage,
 #loginMessage {
+    margin-top: 10px;
+    color: #d8000c;
+    font-weight: bold;
+    text-align: center;
+}
 
-    #registerMessage,
-    #loginMessage {
-        margin-top: 10px;
-        color: #d8000c;
-        font-weight: bold;
-        text-align: center;
-    }
+/* Profile circle styles */
+.profile-circle {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    border: 2px solid #001aff;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-initial {
+    font-size: 1.7em;
+    color: #001aff;
+    font-weight: bold;
+}
+
+/* Account settings page styles */
+.profile-preview {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    border: 2px solid #001aff;
+    overflow: hidden;
+    margin: 0 auto 16px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-initial {
+    font-size: 2.5em;
+    color: #001aff;
+    font-weight: bold;
+}
+
+.settings-form label {
+    display: block;
+    margin-top: 12px;
+}
+
+.settings-form input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border-radius: 6px;
+    border: 1px solid #b3b3b3;
+}
+
+.settings-form input[type="file"] {
+    margin-top: 4px;
+}
+
+.settings-form button {
+    margin-top: 18px;
+    width: 100%;
+}
+
+.back-link {
+    display: block;
+    margin-bottom: 18px;
+    color: #001aff;
+    text-align: left;
 }
