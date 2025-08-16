@@ -38,23 +38,28 @@
     <footer>
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
-    <script src="script.js"></script>
     <script>
-        document.getElementById('registerForm').addEventListener('submit', function (e) {
+        document.getElementById('registerForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
-            let users = JSON.parse(localStorage.getItem('users') || '[]');
-            if (users.some(u => u.email === email)) {
-                document.getElementById('registerMessage').style.color = 'red';
-                document.getElementById('registerMessage').textContent = 'Email already registered.';
-                return;
+            const res = await fetch('http://localhost:3000/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+            const data = await res.json();
+            const msg = document.getElementById('registerMessage');
+            if (data.success) {
+                msg.style.color = 'green';
+                msg.textContent = 'Registration successful! Redirecting to login...';
+                setTimeout(() => window.location.href = 'login.html', 1000);
+            } else {
+                msg.style.color = 'red';
+                msg.textContent = data.message || 'Registration failed.';
             }
-            users.push({ username, email, password });
-            localStorage.setItem('users', JSON.stringify(users));
-            window.location.href = 'login.html';
         });
     </script>
 </body>

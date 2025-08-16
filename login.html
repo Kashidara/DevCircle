@@ -31,22 +31,27 @@
     <footer>
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
-    <script src="script.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
 
-            let users = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = users.find(u => u.email === email && u.password === password);
+            const res = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
             const msg = document.getElementById('loginMessage');
-            if (user) {
-                localStorage.setItem('loggedInUser', JSON.stringify(user));
+            if (data.success) {
+                // Save JWT and user info
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
                 window.location.href = 'main.html';
             } else {
                 msg.style.color = 'red';
-                msg.textContent = 'Invalid email or password.';
+                msg.textContent = data.message || 'Login failed.';
             }
         });
     </script>

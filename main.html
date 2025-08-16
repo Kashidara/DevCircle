@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>DevCircle - Main</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -26,6 +25,163 @@
     <footer>
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
+    <script>
+        // Auth check
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        if (!token || !user) window.location.href = 'login.html';
+
+        // Profile circle
+        const profileCircle = document.getElementById('profileCircle');
+        profileCircle.innerHTML = '';
+        if (user.pfp) {
+            const img = document.createElement('img');
+            img.src = user.pfp;
+            img.alt = "Profile";
+            profileCircle.appendChild(img);
+        } else {
+            const span = document.createElement('span');
+            span.className = "profile-initial";
+            span.textContent = user.username ? user.username[0].toUpperCase() : "?";
+            profileCircle.appendChild(span);
+        }
+        profileCircle.onclick = function () {
+            window.location.href = 'account.html';
+        };
+
+        document.getElementById('userGreeting').textContent = 'Hello, ' + user.username + '!';
+
+        // --- Post Feed Logic ---
+        async function fetchPosts() {
+            const res = await fetch('http://localhost:3000/api/posts');
+            return await res.json();
+        }
+
+        async function renderFeed() {
+            const feed = document.getElementById('feed');
+            const posts = await fetchPosts();
+            feed.innerHTML = '';
+            posts.forEach(post => {
+                const postDiv = document.createElement('div');
+                postDiv.className = 'post';
+
+                // Header
+                const header = document.createElement('div');
+                header.className = 'post-header';
+                // Profile circle
+                const pfp = document.createElement('div');
+                pfp.className = 'profile-circle';
+                pfp.style.position = 'static';
+                pfp.style.width = '36px';
+                pfp.style.height = '36px';
+                if (post.user.pfp) {
+                    const img = document.createElement('img');
+                    img.src = post.user.pfp;
+                    img.alt = "Profile";
+                    pfp.appendChild(img);
+                } else {
+                    const span = document.createElement('span');
+                    span.className = "profile-initial";
+                    span.style.fontSize = "1.1em";
+                    span.textContent = post.user.username ? post.user.username[0].toUpperCase() : "?";
+                    pfp.appendChild(span);
+                }
+                header.appendChild(pfp);
+                // Username
+                const uname = document.createElement('span');
+                uname.className = 'post-user';
+                uname.textContent = post.user.username;
+                header.appendChild(uname);
+                postDiv.appendChild(header);
+
+                // Text
+                const text = document.createElement('div');
+                text.textContent = post.text;
+                postDiv.appendChild(text);
+
+                // Image
+                if (post.img) {
+                    const img = document.createElement('img');
+                    img.className = 'post-img';
+                    img.src = post.img;
+                    img.alt = "Post image";
+                    postDiv.appendChild(img);
+                }
+
+                // Comments
+                const commentsDiv = document.createElement('div');
+                commentsDiv.className = 'post-comments';
+                (post.comments || []).forEach(comment => {
+                    const cdiv = document.createElement('div');
+                    cdiv.className = 'comment';
+                    cdiv.innerHTML = `<span class="comment-user">${comment.user.username}:</span> ${comment.text}`;
+                    commentsDiv.appendChild(cdiv);
+                });
+
+                // Comment form
+                const commentForm = document.createElement('form');
+                commentForm.className = 'comment-form';
+                commentForm.onsubmit = async function (e) {
+                    e.preventDefault();
+                    const input = this.querySelector('input');
+                    const commentText = input.value.trim();
+                    if (!commentText) return;
+                    await fetch(`http://localhost:3000/api/posts/${post._id}/comment`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({ text: commentText })
+                    });
+                    renderFeed();
+                };
+                const commentInput = document.createElement('input');
+                commentInput.type = 'text';
+                commentInput.placeholder = 'Add a comment...';
+                commentForm.appendChild(commentInput);
+                const commentBtn = document.createElement('button');
+                commentBtn.type = 'submit';
+                commentBtn.textContent = 'Send';
+                commentForm.appendChild(commentBtn);
+
+                commentsDiv.appendChild(commentForm);
+                postDiv.appendChild(commentsDiv);
+
+                feed.appendChild(postDiv);
+            });
+        }
+
+        // --- New Post Logic ---
+        document.getElementById('newPostForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const text = document.getElementById('postText').value.trim();
+            const imgInput = document.getElementById('postImage');
+            if (!text) return;
+            let img = null;
+            if (imgInput.files && imgInput.files[0]) {
+                img = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = function (evt) {
+                        resolve(evt.target.result);
+                    };
+                    reader.readAsDataURL(imgInput.files[0]);
+                });
+            }
+            await fetch('http://localhost:3000/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ text, img })
+            });
+            document.getElementById('newPostForm').reset();
+            renderFeed();
+        };
+
+        renderFeed();
+    </script>
 </body>
 
 </html>

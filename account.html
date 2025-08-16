@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>DevCircle - Account Settings</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -31,7 +30,10 @@
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
     <script>
-        let user = getLoggedInUser();
+        const token = localStorage.getItem('token');
+        let user = JSON.parse(localStorage.getItem('user') || 'null');
+        if (!token || !user) window.location.href = 'login.html';
+
         // Show profile preview
         const profilePreview = document.getElementById('profilePreview');
         function updatePreview() {
@@ -52,36 +54,46 @@
 
         document.getElementById('username').value = user.username;
 
-        document.getElementById('settingsForm').onsubmit = function (e) {
+        document.getElementById('settingsForm').onsubmit = async function (e) {
             e.preventDefault();
             const newUsername = document.getElementById('username').value.trim();
-            if (!newUsername) {
-                document.getElementById('settingsMessage').textContent = "Username cannot be empty.";
-                document.getElementById('settingsMessage').style.color = "red";
-                return;
-            }
-            user.username = newUsername;
+            let pfp = user.pfp;
             const fileInput = document.getElementById('pfp');
             if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (evt) {
-                    user.pfp = evt.target.result;
-                    saveUser();
-                };
-                reader.readAsDataURL(fileInput.files[0]);
+                pfp = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = function (evt) {
+                        resolve(evt.target.result);
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                });
+            }
+            const res = await fetch('http://localhost:3000/api/profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ username: newUsername, pfp })
+            });
+            const data = await res.json();
+            if (data.success) {
+                user = data.user;
+                localStorage.setItem('user', JSON.stringify(user));
+                updatePreview();
+                document.getElementById('settingsMessage').textContent = "Profile updated!";
+                document.getElementById('settingsMessage').style.color = "green";
             } else {
-                saveUser();
+                document.getElementById('settingsMessage').textContent = "Update failed.";
+                document.getElementById('settingsMessage').style.color = "red";
             }
         };
 
-        function saveUser() {
-            updateUserInStorage(user);
-            updatePreview();
-            document.getElementById('settingsMessage').textContent = "Profile updated!";
-            document.getElementById('settingsMessage').style.color = "green";
-        }
-
-        setupLogoutButton();
+        document.getElementById('logoutBtn').onclick = function () {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        };
 
         document.getElementById('pfp').onchange = function () {
             if (this.files && this.files[0]) {
