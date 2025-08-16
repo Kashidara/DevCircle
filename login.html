@@ -31,7 +31,7 @@
     <footer>
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
-    <script src="login.js"></script>
+    <script src="script.js"></script>
     <script>
         document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -42,9 +42,7 @@
             const user = users.find(u => u.email === email && u.password === password);
             const msg = document.getElementById('loginMessage');
             if (user) {
-                // Save logged-in user
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
-                // Redirect to main page
                 window.location.href = 'main.html';
             } else {
                 msg.style.color = 'red';
