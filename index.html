@@ -39,6 +39,28 @@
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
     <script src="register.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Get users from localStorage or empty array
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            // Check if email already exists
+            if (users.some(u => u.email === email)) {
+                document.getElementById('registerMessage').style.color = 'red';
+                document.getElementById('registerMessage').textContent = 'Email already registered.';
+                return;
+            }
+            // Add new user
+            users.push({ username, email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            // Redirect to login
+            window.location.href = 'login.html';
+        });
+    </script>
 </body>
 
 </html>

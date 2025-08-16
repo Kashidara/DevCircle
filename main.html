@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DevCircle - Main</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1 id="welcome">Welcome to DevCircle</h1>
+    </header>
+    <div class="center-box">
+        <h2 class="login-title">Main Page</h2>
+        <p id="userGreeting"></p>
+        <button id="logoutBtn">Logout</button>
+    </div>
+    <footer>
+        <p>&copy; 2024 DevCircle. All rights reserved.</p>
+    </footer>
+    <script>
+        // Show logged-in user
+        const user = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+        if (!user) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('userGreeting').textContent = 'Hello, ' + user.username + '!';
+        }
+        document.getElementById('logoutBtn').onclick = function () {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        };
+    </script>
+</body>
+
+</html>
