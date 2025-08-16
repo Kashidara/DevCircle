@@ -11,24 +11,21 @@
 <body>
     <header>
         <h1 id="welcome">Welcome to DevCircle</h1>
-        <div class="profile-circle" id="profileCircle" title="Account Settings">
-            <!-- Profile image or initial will be inserted by JS -->
-        </div>
+        <div class="profile-circle" id="profileCircle" title="Account Settings"></div>
     </header>
     <div class="center-box">
         <h2 class="login-title">Main Page</h2>
         <p id="userGreeting"></p>
-        <button id="logoutBtn">Logout</button>
+        <form class="new-post-form" id="newPostForm">
+            <textarea id="postText" placeholder="What's on your mind?" required></textarea>
+            <input type="file" id="postImage" accept="image/*">
+            <button type="submit">Post</button>
+        </form>
+        <div class="feed" id="feed"></div>
     </div>
     <footer>
         <p>&copy; 2024 DevCircle. All rights reserved.</p>
     </footer>
-    <script>
-        const user = getLoggedInUser();
-        document.getElementById('userGreeting').textContent = 'Hello, ' + user.username + '!';
-        renderProfileCircle(user);
-        setupLogoutButton();
-    </script>
 </body>
 
 </html>
